@@ -15,6 +15,10 @@ setup(
             'mycommand = mycommand.cli:cli',
         ],
     },
+    include_package_data=True,
+    package_data={
+        'configuration': ['mycommand/resources/configuration.json'],
+    },
     install_requires = [
         'click',
         'decorator'

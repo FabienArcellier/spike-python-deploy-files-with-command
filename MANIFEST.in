@@ -1,2 +1,8 @@
+# WARNING : the usage of MANIFEST.in is the way before python 2.6 to
+# package resources. Prefer using package_data attribute in setup.py
+
+# Don't use this file in your moder project
+
 include *.md
 include requirements.txt
+include mycommand/resources/*

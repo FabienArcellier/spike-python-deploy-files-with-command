@@ -6,6 +6,16 @@ the goal of this spike is to be able to copy
 a file packaged in the application inside the
 working directory of the user.
 
+## references
+
+* [Alice in Python projectland](http://veekaybee.github.io/2017/09/26/python-packaging/)
+
+    the python packaging introduction I would have dreamed to write.
+
+* [Python Packaging User Guide](https://packaging.python.org/)
+
+    the source of truth for python packaging written by the Python Packaging Authority.
+
 ## step 1 : setup the environment
 
 ```bash
@@ -13,7 +23,48 @@ git clone https://github.com/FabienArcellier/spike-python-deploy-files-with-comm
 cd spike-python-deploy-files-with-command
 make venv
 make install_requirements_dev
+
+
+venv/bin/python -m mycommand.cli command1 --name fabien
 ```
+
+## step 2 : package a resource file with MANIFEST in source distribution
+
+in MANIFEST.in, reference the directory `mycommand/resources/*`.
+
+```
+make dist
+```
+
+2.1 - check `configuration.json` is present in the source distribution artefact `dist/mycommand-1.0.0.tar.gz`
+
+## step 3 : package the application in wheel
+
+The packaging through `bdist_wheel` does not contain `configuration.json`.
+
+```bash
+venv/bin/python setup.py bdist_wheel
+```
+
+`MANIFEST.in` is not supported in python3. The way to package
+data resource is to use the attribute `package_data` from `setup.py`.
+
+We will use `setup.py` to reference our configuration.json file.
+
+```python
+setup(
+    # ...
+    include_package_data=True,
+    package_data={
+        'configuration': ['mycommand/resources/configuration.json'],
+    }
+)
+```
+
+* [Python Packaging User Guide - Packaging and distributing projects - package_data](https://packaging.python.org/guides/distributing-packages-using-setuptools/?highlight=package_data#package-data)
+* [Building and Distributing Packages with Setuptools - including data files](https://setuptools.readthedocs.io/en/latest/setuptools.html#including-data-files)
+
+## step 4 : copy configuration.json in the working directory
 
 ## Usage
 
@@ -93,3 +144,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
