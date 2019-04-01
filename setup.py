@@ -17,7 +17,7 @@ setup(
     },
     include_package_data=True,
     package_data={
-        'configuration': ['mycommand/resources/configuration.json'],
+        'configuration': ['mycommand/resources/*'],
     },
     install_requires = [
         'click',

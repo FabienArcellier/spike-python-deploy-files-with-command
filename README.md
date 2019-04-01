@@ -46,8 +46,9 @@ The packaging through `bdist_wheel` does not contain `configuration.json`.
 venv/bin/python setup.py bdist_wheel
 ```
 
-`MANIFEST.in` is not supported in python3. The way to package
-data resource is to use the attribute `package_data` from `setup.py`.
+`MANIFEST.in` is not enough. The way to package
+data resource is to use explicitely the attribute `package_data` from `setup.py` and
+having the configuration in `MANIFEST.in`.
 
 We will use `setup.py` to reference our configuration.json file.
 
@@ -56,7 +57,7 @@ setup(
     # ...
     include_package_data=True,
     package_data={
-        'configuration': ['mycommand/resources/configuration.json'],
+        'configuration': ['mycommand/resources/*'],
     }
 )
 ```
